@@ -13,27 +13,27 @@
     </style>
 
     <style name="RumStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/rum</item>
+        <item name="android:src">@drawable/rum</item>
     </style>
 
     <style name="GinStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/gin</item>
+        <item name="android:src">@drawable/gin</item>
     </style>
 
     <style name="TequilaStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/tequila</item>
+        <item name="android:src">@drawable/tequila</item>
     </style>
 
     <style name="WhiskeyStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/whiskey</item>
+        <item name="android:src">@drawable/whiskey</item>
     </style>
 
     <style name="VodkaStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/vodka</item>
+        <item name="android:src">@drawable/vodka</item>
     </style>
 
     <style name="BrandyStyle" parent="CocktailBaseImgStyle">
-        <item name="srcCompat">@drawable/brandy</item>
+        <item name="android:src">@drawable/brandy</item>
     </style>
 
 </resources>

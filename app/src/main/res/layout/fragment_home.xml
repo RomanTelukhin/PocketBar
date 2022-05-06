@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/baseTitle" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/rumImg"
         style="@style/RumStyle"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="@+id/rumImg"
         app:layout_constraintWidth_percent=".50" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/ginImg"
         style="@style/GinStyle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="@+id/ginImg"
         app:layout_constraintWidth_percent=".50" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/tequilaImg"
         style="@style/TequilaStyle"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,9 +73,10 @@
         app:layout_constraintTop_toBottomOf="@+id/rumImg"
         app:layout_constraintWidth_percent=".50" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/whiskeyImg"
         style="@style/WhiskeyStyle"
+        android:tint="@color/blackTint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ginImg"
         app:layout_constraintWidth_percent=".50" />
@@ -92,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ginImg"
         app:layout_constraintWidth_percent=".50" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/vodkaImg"
         style="@style/VodkaStyle"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tequilaImg"
         app:layout_constraintWidth_percent=".50" />
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/brandyImg"
         style="@style/BrandyStyle"
         app:layout_constraintEnd_toEndOf="parent"

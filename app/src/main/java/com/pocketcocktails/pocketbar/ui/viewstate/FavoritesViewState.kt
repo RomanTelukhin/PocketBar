@@ -1,9 +1,8 @@
 package com.pocketcocktails.pocketbar.ui.viewstate
 
 import com.pocketcocktails.pocketbar.data.domain.CocktailListItem
-import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 
-data class FavoritesViewState(val items: Items = Items.Idle, val isFavorite: Boolean = false,) {
+data class FavoritesViewState(val items: Items = Items.Idle, val isFavorite: Boolean = false) {
 
     sealed class Items {
         object Idle : Items()

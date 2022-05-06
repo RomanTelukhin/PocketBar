@@ -6,7 +6,6 @@ import com.pocketcocktails.pocketbar.ui.actions.UserActionSearchById
 import com.pocketcocktails.pocketbar.ui.interactions.CocktailInteraction
 import com.pocketcocktails.pocketbar.ui.viewstate.CocktailPartialViewStates
 import com.pocketcocktails.pocketbar.ui.viewstate.CocktailViewState
-import com.pocketcocktails.pocketbar.utils.CocktailPartialViewState
 import com.pocketcocktails.pocketbar.utils.Constants
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,3 +48,5 @@ class CocktailViewModel @Inject constructor(private val searchInteraction: Cockt
             .launchIn(viewModelScope)
     }
 }
+
+typealias CocktailPartialViewState = (CocktailViewState) -> CocktailViewState

@@ -5,19 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.pocketcocktails.pocketbar.data.domain.CocktailListItem
 import com.pocketcocktails.pocketbar.ui.actions.UserActionSearchByQuery
 import com.pocketcocktails.pocketbar.ui.interactions.SearchByQueryInteraction
-import com.pocketcocktails.pocketbar.ui.viewstate.SearchPartialViewStates
 import com.pocketcocktails.pocketbar.ui.viewstate.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
-import com.pocketcocktails.pocketbar.utils.SearchPartialViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import com.pocketcocktails.pocketbar.utils.Result
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SearchByQueryViewModel @Inject constructor(private val searchByQueryInteraction: SearchByQueryInteraction) : ViewModel() {
+class SearchByQueryViewModel @Inject constructor(private val searchByQueryInteraction: SearchByQueryInteraction) :
+    ViewModel() {
 
     /**Нужен для обмена данными между корутинами
     Можно подключить несколько потребителей
@@ -32,19 +32,19 @@ class SearchByQueryViewModel @Inject constructor(private val searchByQueryIntera
 
     private fun performSearchByQuery(queryText: String): Flow<SearchPartialViewState> = flow {
         Timber.d("$TEST_LOG_TAG performSearchByQuery flow: $this")
-        emit(value = SearchPartialViewStates.onQueryChanged(queryText = queryText))
+        emit(value = onQueryChanged(queryText = queryText))
         delay(1000L)
 
         val result = searchByQueryInteraction.searchDrink(queryText)
             .collect { value ->
-                emit(value = SearchPartialViewStates.onSearchResult(result = value))
+                emit(value = onSearchResult(result = value))
             }
         Timber.d("$TEST_LOG_TAG performSearchByQuery flow result: $result")
     }
 
     private fun onFavoriteClick(cocktail: CocktailListItem): Flow<SearchPartialViewState> = flow {
         Timber.d("$TEST_LOG_TAG onFavoriteClick flow: $this")
-        emit(value = SearchPartialViewStates.onFavoriteChanged(cocktail = cocktail))
+        emit(value = onFavoriteChanged(cocktail = cocktail))
         searchByQueryInteraction.changeFavorite(cocktail)
     }
 
@@ -88,4 +88,29 @@ class SearchByQueryViewModel @Inject constructor(private val searchByQueryIntera
             }
             .launchIn(viewModelScope)
     }
+
+    private fun onQueryChanged(queryText: String): SearchPartialViewState = { previousViewState ->
+        Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged queryText: $queryText, previousViewState: $previousViewState")
+        val previousStateCopy = previousViewState.copy(query = queryText, items = SearchViewState.Items.Loading)
+        Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged previousViewState after copy: $previousStateCopy")
+        previousStateCopy
+    }
+
+    private fun onSearchResult(result: Result<List<CocktailListItem>>): SearchPartialViewState =
+        { previousViewState ->
+            Timber.d("$TEST_LOG_TAG SearchPartialViewStates onSearchResult previousViewState: $previousViewState")
+            val items = when (result) {
+                is Result.Success -> SearchViewState.Items.Drinks(result.data)
+                is Result.Failure -> SearchViewState.Items.Error(result.exception.message)
+            }
+            val onSearchResult = previousViewState.copy(items = items)
+            Timber.d("$TEST_LOG_TAG SearchPartialViewStates onSearchResult previousViewState after copy: $onSearchResult")
+            onSearchResult
+        }
+
+    private fun onFavoriteChanged(cocktail: CocktailListItem): SearchPartialViewState =
+        { previousViewState ->
+            val previousStateCopy = previousViewState.copy(isFavorite = cocktail.isFavorite)
+            previousStateCopy
+        }
 }
