@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/baseTitle"
+        android:padding="10dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cocktail_base_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/baseTitle" />
+
+    <ImageView
+        android:id="@+id/rumImg"
+        style="@style/RumStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baseTitle"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/rumText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rum_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/rumImg"
+        app:layout_constraintEnd_toEndOf="@+id/rumImg"
+        app:layout_constraintStart_toStartOf="@+id/rumImg"
+        app:layout_constraintTop_toTopOf="@+id/rumImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <ImageView
+        android:id="@+id/ginImg"
+        style="@style/GinStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baseTitle"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/ginText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/gin_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/ginImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rumImg"
+        app:layout_constraintTop_toTopOf="@+id/ginImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <ImageView
+        android:id="@+id/tequilaImg"
+        style="@style/TequilaStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rumImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/tequilaText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tequila_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/tequilaImg"
+        app:layout_constraintEnd_toEndOf="@+id/tequilaImg"
+        app:layout_constraintStart_toStartOf="@+id/tequilaImg"
+        app:layout_constraintTop_toBottomOf="@+id/rumImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <ImageView
+        android:id="@+id/whiskeyImg"
+        style="@style/WhiskeyStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ginImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/whiskeyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/whiskey_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/whiskeyImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tequilaImg"
+        app:layout_constraintTop_toBottomOf="@+id/ginImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <ImageView
+        android:id="@+id/vodkaImg"
+        style="@style/VodkaStyle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tequilaImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/vodkaText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vodka_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/vodkaImg"
+        app:layout_constraintEnd_toEndOf="@+id/vodkaImg"
+        app:layout_constraintStart_toStartOf="@+id/vodkaImg"
+        app:layout_constraintTop_toBottomOf="@+id/tequilaImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <ImageView
+        android:id="@+id/brandyImg"
+        style="@style/BrandyStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/whiskeyImg"
+        app:layout_constraintWidth_percent=".50" />
+
+    <TextView
+        android:id="@+id/brandyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/brandy_text"
+        android:textColor="@color/whiteText"
+        app:layout_constraintBottom_toBottomOf="@+id/brandyImg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/vodkaImg"
+        app:layout_constraintTop_toBottomOf="@+id/whiskeyImg"
+        app:layout_constraintWidth_percent=".50" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
