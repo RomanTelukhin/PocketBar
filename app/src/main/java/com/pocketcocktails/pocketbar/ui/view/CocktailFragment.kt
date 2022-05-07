@@ -19,7 +19,9 @@ import com.pocketcocktails.pocketbar.ui.viewmodel.CocktailViewModel
 import com.pocketcocktails.pocketbar.ui.viewstate.CocktailViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
+import com.pocketcocktails.pocketbar.utils.appComponent
 import com.pocketcocktails.pocketbar.utils.load
+import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
@@ -31,6 +33,7 @@ class CocktailFragment : Fragment(), CocktailView {
     private lateinit var binding: FragmentCocktailBinding
 
     private var ingredientAdapter = IngredientsAdapter()
+    
     private var idCocktail = EMPTY_STRING
 
     @Inject
@@ -42,7 +45,7 @@ class CocktailFragment : Fragment(), CocktailView {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCocktailBinding.inflate(inflater, container, false)
-        CocktailsApp().appComponent.inject(this)
+        requireContext().appComponent.inject(this)
         setupViewModel()
         setupView()
         renderView()
@@ -71,10 +74,10 @@ class CocktailFragment : Fragment(), CocktailView {
 
     private fun showData(viewState: CocktailViewState.Item) {
         when (viewState) {
-            is CocktailViewState.Item.Loading -> binding.cocktailProgress.visibility = View.VISIBLE
+            is CocktailViewState.Item.Loading -> binding.cocktailProgress.setVisibility(true)
             is CocktailViewState.Item.Cocktail -> {
                 Timber.d("$TEST_LOG_TAG cocktail item: ${viewState.cocktailItem}")
-                binding.cocktailProgress.visibility = View.GONE
+                binding.cocktailProgress.setVisibility(false)
                 if (viewState.cocktailItem.drinkThumb != null) {
                     binding.nameCocktail.text = viewState.cocktailItem.name
                     binding.drinkImage.load(viewState.cocktailItem.drinkThumb)

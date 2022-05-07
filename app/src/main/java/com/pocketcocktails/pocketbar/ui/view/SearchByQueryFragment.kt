@@ -19,6 +19,7 @@ import com.pocketcocktails.pocketbar.ui.viewmodel.SearchByQueryViewModel
 import com.pocketcocktails.pocketbar.ui.viewstate.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
+import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
@@ -79,30 +80,30 @@ class SearchByQueryFragment : Fragment(), SearchView {
     }
 
     override fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.infoTextView.visibility = View.GONE
-        binding.cocktailsRecycler.visibility = View.GONE
+        binding.progressBar.setVisibility(true)
+        binding.infoTextView.setVisibility(false)
+        binding.cocktailsRecycler.setVisibility(false)
     }
 
     override fun showDrinks(result: SearchViewState.Items.Drinks) {
-        binding.progressBar.visibility = View.GONE
-        binding.infoTextView.visibility = View.GONE
-        binding.cocktailsRecycler.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.infoTextView.setVisibility(false)
+        binding.cocktailsRecycler.setVisibility(true)
         drinksAdapter.listCocktails = result.drinksList
     }
 
     override fun showError(result: SearchViewState.Items.Error) {
-        binding.progressBar.visibility = View.GONE
-        binding.cocktailsRecycler.visibility = View.GONE
-        binding.infoTextView.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.cocktailsRecycler.setVisibility(false)
+        binding.infoTextView.setVisibility(true)
         binding.infoTextView.text = result.error
     }
 
     override fun showIdle() {
-        binding.progressBar.visibility = View.GONE
-        binding.infoTextView.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.infoTextView.setVisibility(true)
         binding.infoTextView.text = "Input text"
-        binding.cocktailsRecycler.visibility = View.GONE
+        binding.cocktailsRecycler.setVisibility(false)
     }
 
     private fun onItemClick(item: CocktailListItem) {

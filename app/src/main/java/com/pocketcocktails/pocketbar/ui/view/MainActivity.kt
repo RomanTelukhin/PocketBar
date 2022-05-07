@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.ActivityMainBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,29 +17,30 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.bottomMenu.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+//        binding.bottomMenu.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        binding.bottomMenu.setOnItemSelectedListener(mOnNavigationItemSelectedListener)
         binding.bottomMenu.selectedItemId = R.id.home
         setContentView(binding.root)
     }
 
     private val mOnNavigationItemSelectedListener =
-        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        NavigationBarView.OnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
                     openFragment(HomeFragment.newInstance())
-                    return@OnNavigationItemSelectedListener true
+                    return@OnItemSelectedListener true
                 }
                 R.id.favorites -> {
                     openFragment(FavoritesFragment.newInstance())
-                    return@OnNavigationItemSelectedListener true
+                    return@OnItemSelectedListener true
                 }
                 R.id.search -> {
                     openFragment(SearchByQueryFragment.newInstance())
-                    return@OnNavigationItemSelectedListener true
+                    return@OnItemSelectedListener true
                 }
                 R.id.profile -> {
                     openFragment(ProfileFragment.newInstance())
-                    return@OnNavigationItemSelectedListener true
+                    return@OnItemSelectedListener true
                 }
             }
             false

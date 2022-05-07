@@ -15,10 +15,12 @@ import com.pocketcocktails.pocketbar.databinding.FragmentCocktailByBaseBinding
 import com.pocketcocktails.pocketbar.ui.actions.UserActionSearchByBase
 import com.pocketcocktails.pocketbar.ui.adapter.DrinksAdapter
 import com.pocketcocktails.pocketbar.ui.viewmodel.SearchByBaseViewModel
+import com.pocketcocktails.pocketbar.ui.viewstate.FavoritesViewState
 import com.pocketcocktails.pocketbar.ui.viewstate.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
+import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
@@ -64,6 +66,7 @@ class SearchByBaseFragment : Fragment() {
                                     is SearchViewState.Items.Loading -> showLoading()
                                     is SearchViewState.Items.Drinks -> showDrinks(state)
                                     is SearchViewState.Items.Error -> showError(state)
+                                    is SearchViewState.Items.Idle -> {}
                                 }
                             }
                 }
@@ -71,19 +74,19 @@ class SearchByBaseFragment : Fragment() {
 
     private fun showLoading() {
         binding.progressBar.visibility = View.VISIBLE
-        binding.cocktailsRecycler.visibility = View.GONE
+        binding.cocktailsRecycler.setVisibility(false)
     }
 
     private fun showDrinks(result: SearchViewState.Items.Drinks) {
         Timber.d("$TEST_LOG_TAG renderView SearchViewState: $")
-        binding.progressBar.visibility = View.GONE
-        binding.cocktailsRecycler.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.cocktailsRecycler.setVisibility(true)
         drinksAdapter.listCocktails = result.drinksList
     }
 
     private fun showError(result: SearchViewState.Items.Error) {
-        binding.progressBar.visibility = View.GONE
-        binding.cocktailsRecycler.visibility = View.GONE
+        binding.progressBar.setVisibility(false)
+        binding.cocktailsRecycler.setVisibility(false)
     }
 
     private fun onItemClick(item: CocktailListItem) {

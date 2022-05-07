@@ -27,7 +27,9 @@ class DefaultCocktailsRepository @Inject constructor(
 
     @Throws(IOException::class)
     override suspend fun getFavoriteById(id: String): CocktailListItem {
+
         val favoriteItemList = apiHelper.getDrinkById(id).cocktailsList.first()
+
         return CocktailListItem(
             favoriteItemList.idDrink,
             favoriteItemList.strDrink,
@@ -42,121 +44,121 @@ class DefaultCocktailsRepository @Inject constructor(
         val ingredients = arrayListOf<Ingredient>()
         var ingrid = Ingredient()
 
-        if (drink.strIngredient1.isNotEmpty()) {
+        if (!drink.strIngredient1.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient1)
-            if (drink.strMeasure1.isNotEmpty()) {
+            if (!drink.strMeasure1.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure1)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient2.isNotEmpty()) {
+        if (!drink.strIngredient2.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient2)
-            if (drink.strMeasure2.isNotEmpty()) {
+            if (!drink.strMeasure2.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure2)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient3.isNotEmpty()) {
+        if (!drink.strIngredient3.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient3)
-            if (drink.strMeasure3.isNotEmpty()) {
+            if (!drink.strMeasure3.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure3)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient4.isNotEmpty()) {
+        if (!drink.strIngredient4.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient4)
-            if (drink.strMeasure4.isNotEmpty()) {
+            if (!drink.strMeasure4.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure4)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient5.isNotEmpty()) {
+        if (!drink.strIngredient5.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient5)
-            if (drink.strMeasure5.isNotEmpty()) {
+            if (!drink.strMeasure5.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure5)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient6.isNotEmpty()) {
+        if (!drink.strIngredient6.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient6)
-            if (drink.strMeasure6.isNotEmpty()) {
+            if (!drink.strMeasure6.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure6)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient7.isNotEmpty()) {
+        if (!drink.strIngredient7.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient7)
-            if (drink.strMeasure7.isNotEmpty()) {
+            if (!drink.strMeasure7.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure7)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient8.isNotEmpty()) {
+        if (!drink.strIngredient8.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient8)
-            if (drink.strMeasure8.isNotEmpty()) {
+            if (!drink.strMeasure8.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure8)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient9.isNotEmpty()) {
+        if (!drink.strIngredient9.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient9)
-            if (drink.strMeasure9.isNotEmpty()) {
+            if (!drink.strMeasure9.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure9)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient10.isNotEmpty()) {
+        if (!drink.strIngredient10.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient10)
-            if (drink.strMeasure10.isNotEmpty()) {
+            if (!drink.strMeasure10.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure10)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient11.isNotEmpty()) {
+        if (!drink.strIngredient11.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient11)
-            if (drink.strMeasure11.isNotEmpty()) {
+            if (!drink.strMeasure11.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure11)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient12.isNotEmpty()) {
+        if (!drink.strIngredient12.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient12)
-            if (drink.strMeasure12.isNotEmpty()) {
+            if (!drink.strMeasure12.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure12)
                 ingredients.add(ingrid)
             }
         }
 
-        if (drink.strIngredient13.isNotEmpty()) {
+        if (!drink.strIngredient13.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient13)
-            if (drink.strMeasure13.isNotEmpty()) {
+            if (!drink.strMeasure13.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure13)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient14.isNotEmpty()) {
+        if (!drink.strIngredient14.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient14)
-            if (drink.strMeasure14.isNotEmpty()) {
+            if (!drink.strMeasure14.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure14)
             }
             ingredients.add(ingrid)
         }
 
-        if (drink.strIngredient15.isNotEmpty()) {
+        if (!drink.strIngredient15.isNullOrEmpty()) {
             ingrid = ingrid.copy(name = drink.strIngredient15)
-            if (drink.strMeasure15.isNotEmpty()) {
+            if (!drink.strMeasure15.isNullOrEmpty()) {
                 ingrid = ingrid.copy(measure = drink.strMeasure15)
             }
             ingredients.add(ingrid)

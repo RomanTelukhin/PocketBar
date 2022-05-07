@@ -10,12 +10,11 @@
         <entry key="..\:/AndroidProjects/Bar_NEW/app/src/main/res/layout/fragment_home.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/Bar_NEW/app/src/main/res/layout/item_cocktail.xml" value="0.55" />
         <entry key="..\:/AndroidProjects/Bar_NEW/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3959425749602141" />
+        <entry key="..\:/AndroidProjects/PocketBar/PocketBar/app/src/main/res/layout/fragment_favorites.xml" value="0.3109375" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

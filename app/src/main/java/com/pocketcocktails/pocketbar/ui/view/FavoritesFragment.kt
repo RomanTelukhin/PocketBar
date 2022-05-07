@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pocketcocktails.pocketbar.CocktailsApp
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.data.domain.CocktailListItem
 import com.pocketcocktails.pocketbar.databinding.FragmentFavoritesBinding
@@ -18,6 +16,7 @@ import com.pocketcocktails.pocketbar.ui.viewmodel.FavoritesViewModel
 import com.pocketcocktails.pocketbar.ui.viewstate.FavoritesViewState
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
+import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
@@ -66,29 +65,29 @@ class FavoritesFragment : Fragment() {
                             is FavoritesViewState.Items.Loading -> showLoading()
                             is FavoritesViewState.Items.Drinks -> showDrinks(state)
                             is FavoritesViewState.Items.Error -> showError(state)
+                            is FavoritesViewState.Items.Idle -> {}
                         }
                     }
             }
     }
 
     private fun showLoading() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.infoTextView.visibility = View.GONE
-        binding.favoritesRecycler.visibility = View.GONE
+        binding.progressBar.setVisibility(true)
+        binding.infoTextView.setVisibility(false)
+        binding.favoritesRecycler.setVisibility(false)
     }
 
     private fun showDrinks(result: FavoritesViewState.Items.Drinks) {
-        binding.progressBar.visibility = View.GONE
-        binding.infoTextView.visibility = View.GONE
-        binding.favoritesRecycler.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.infoTextView.setVisibility(false)
+        binding.favoritesRecycler.setVisibility(true)
         favoritesAdapter.listCocktails = result.drinksList
-
     }
 
     private fun showError(result: FavoritesViewState.Items.Error) {
-        binding.progressBar.visibility = View.GONE
-        binding.favoritesRecycler.visibility = View.GONE
-        binding.infoTextView.visibility = View.VISIBLE
+        binding.progressBar.setVisibility(false)
+        binding.favoritesRecycler.setVisibility(false)
+        binding.infoTextView.setVisibility(true)
         binding.infoTextView.text = result.error
     }
 

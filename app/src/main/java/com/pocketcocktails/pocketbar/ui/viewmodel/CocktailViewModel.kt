@@ -2,12 +2,13 @@ package com.pocketcocktails.pocketbar.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pocketcocktails.pocketbar.data.domain.CocktailInfo
 import com.pocketcocktails.pocketbar.ui.actions.UserActionSearchById
 import com.pocketcocktails.pocketbar.ui.interactions.CocktailInteraction
-import com.pocketcocktails.pocketbar.ui.viewstate.CocktailPartialViewStates
 import com.pocketcocktails.pocketbar.ui.viewstate.CocktailViewState
 import com.pocketcocktails.pocketbar.utils.Constants
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
+import com.pocketcocktails.pocketbar.utils.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -27,11 +28,11 @@ class CocktailViewModel @Inject constructor(private val searchInteraction: Cockt
         get() = mutableSelectedItem
 
     private fun performSearchById(): Flow<CocktailPartialViewState> = flow {
-        emit(value = CocktailPartialViewStates.onIdChanged())
+        emit(value = onIdChanged())
         delay(1000L)
         val result = searchInteraction.getDrinkById(mIdCocktail)
         Timber.d("${Constants.TEST_LOG_TAG} performSearchById data: $result")
-        emit(value = CocktailPartialViewStates.onSearchResult(result = result))
+        emit(value = onSearchResult(result = result))
     }
 
     init {
@@ -47,6 +48,21 @@ class CocktailViewModel @Inject constructor(private val searchInteraction: Cockt
             .onEach { viewState -> mutableSelectedItem.value = viewState }
             .launchIn(viewModelScope)
     }
+
+    private fun onIdChanged(): CocktailPartialViewState = { previousViewState ->
+        val previousStateCopy = previousViewState.copy(cocktail = CocktailViewState.Item.Loading)
+        previousStateCopy
+    }
+
+    private fun onSearchResult(result: Result<CocktailInfo>): CocktailPartialViewState =
+        { previousViewState ->
+            val items = when (result) {
+                is Result.Success -> CocktailViewState.Item.Cocktail(result.data)
+                is Result.Failure -> CocktailViewState.Item.Error(result.exception.message)
+            }
+            val onSearchResult = previousViewState.copy(cocktail = items)
+            onSearchResult
+        }
 }
 
 typealias CocktailPartialViewState = (CocktailViewState) -> CocktailViewState
