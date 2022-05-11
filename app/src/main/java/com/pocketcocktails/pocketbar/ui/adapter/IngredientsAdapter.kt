@@ -10,7 +10,7 @@ import com.pocketcocktails.pocketbar.data.domain.Ingredient
 import com.pocketcocktails.pocketbar.utils.Constants
 import timber.log.Timber
 
-class IngredientsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class IngredientsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var listIngrid: List<Ingredient> = emptyList()
         set(value) {

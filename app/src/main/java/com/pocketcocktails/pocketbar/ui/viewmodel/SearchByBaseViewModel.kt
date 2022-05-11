@@ -17,9 +17,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SearchByBaseViewModel @Inject constructor(private val searchInteraction: SearchByBaseInteraction) : ViewModel() {
+class SearchByBaseViewModel @Inject constructor(private val searchInteraction: SearchByBaseInteraction) :
+    ViewModel() {
     val userActionFlow = MutableSharedFlow<UserActionSearchByBase>(1)
-    private val mutableStateFlow = MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
+    private val mutableStateFlow =
+        MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
 
     val cocktailsByBaseViewState: StateFlow<SearchViewState>
         get() = mutableStateFlow
@@ -58,7 +60,8 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
 
     private fun onQueryChanged(queryText: String): SearchPartialViewState = { previousViewState ->
         Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged queryText: $queryText, previousViewState: $previousViewState")
-        val previousStateCopy = previousViewState.copy(query = queryText, items = SearchViewState.Items.Loading)
+        val previousStateCopy =
+            previousViewState.copy(query = queryText, items = SearchViewState.Items.Loading)
         Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged previousViewState after copy: $previousStateCopy")
         previousStateCopy
     }

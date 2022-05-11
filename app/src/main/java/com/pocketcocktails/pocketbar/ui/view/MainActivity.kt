@@ -3,16 +3,20 @@ package com.pocketcocktails.pocketbar.ui.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationBarView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.ActivityMainBinding
+import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), INavigation {
 
     private lateinit var binding: ActivityMainBinding
+
+    override fun hideBottomNavigation(isShown: Boolean) {
+        binding.bottomMenu.setVisibility(isShown)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

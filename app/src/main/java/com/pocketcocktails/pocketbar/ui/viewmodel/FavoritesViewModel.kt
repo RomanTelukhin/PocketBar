@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
+
+typealias FavoritesPartialViewState = (FavoritesViewState) -> FavoritesViewState
+
 @ExperimentalCoroutinesApi
 class FavoritesViewModel @Inject constructor(private val searchInteraction: FavoritesInteraction) : ViewModel() {
     val userActionChannel = MutableSharedFlow<UserActionShowFavorites>(1)
@@ -107,5 +110,3 @@ class FavoritesViewModel @Inject constructor(private val searchInteraction: Favo
             }
         }
 }
-
-typealias FavoritesPartialViewState = (FavoritesViewState) -> FavoritesViewState
