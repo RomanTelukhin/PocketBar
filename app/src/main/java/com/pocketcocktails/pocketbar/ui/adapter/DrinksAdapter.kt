@@ -8,10 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.data.domain.CocktailListItem
-import com.pocketcocktails.pocketbar.utils.Constants
-import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.load
-import timber.log.Timber
 
 class DrinksAdapter(
     private var onItemClick: (CocktailListItem) -> Unit,
@@ -40,7 +37,6 @@ class DrinksAdapter(
         val url = drinksItem.strDrinkThumb
         holder.drinksImage.load(url)
         holder.favImage.isActivated = drinksItem.isFavorite
-
         holder.favImage.setOnClickListener {
             holder.favImage.isActivated = !holder.favImage.isActivated
             onFavoriteClick.invoke(drinksItem)

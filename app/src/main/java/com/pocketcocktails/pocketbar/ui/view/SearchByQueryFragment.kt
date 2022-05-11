@@ -1,44 +1,39 @@
 package com.pocketcocktails.pocketbar.ui.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
+import android.content.Context
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pocketcocktails.pocketbar.CocktailsApp
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.data.domain.CocktailListItem
 import com.pocketcocktails.pocketbar.databinding.FragmentSearchBinding
 import com.pocketcocktails.pocketbar.ui.actions.UserActionSearchByQuery
 import com.pocketcocktails.pocketbar.ui.adapter.DrinksAdapter
-import com.pocketcocktails.pocketbar.ui.view.iview.SearchView
 import com.pocketcocktails.pocketbar.ui.viewmodel.SearchByQueryViewModel
 import com.pocketcocktails.pocketbar.ui.viewstate.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
-import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SearchByQueryFragment : Fragment(), SearchView {
+class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
 
-    private lateinit var binding: FragmentSearchBinding
+    companion object {
+        fun newInstance(): SearchByQueryFragment = SearchByQueryFragment()
+    }
+
     private lateinit var drinksAdapter: DrinksAdapter
 
     @Inject
     lateinit var searchByQueryViewModel: SearchByQueryViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
-        requireContext().appComponent.inject(this)
-        setupView()
-        renderView()
-        return binding.root
+    override fun getViewBinding(): FragmentSearchBinding =
+        FragmentSearchBinding.inflate(layoutInflater)
+
+    override fun injectViewModel(appContext: Context) {
+        appContext.appComponent.inject(this)
     }
 
     override fun setupView() =
@@ -55,7 +50,11 @@ class SearchByQueryFragment : Fragment(), SearchView {
                 object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String): Boolean = false
                     override fun onQueryTextChange(newText: String): Boolean {
-                        searchByQueryViewModel.userActionFlow.tryEmit(UserActionSearchByQuery.OnQueryChanged(newText))
+                        searchByQueryViewModel.userActionFlow.tryEmit(
+                            UserActionSearchByQuery.OnQueryChanged(
+                                newText
+                            )
+                        )
                         return false
                     }
                 })
@@ -79,31 +78,31 @@ class SearchByQueryFragment : Fragment(), SearchView {
             }
     }
 
-    override fun showLoading() {
-        binding.progressBar.setVisibility(true)
-        binding.infoTextView.setVisibility(false)
-        binding.cocktailsRecycler.setVisibility(false)
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.infoTextView.visibility = View.GONE
+        binding.cocktailsRecycler.visibility = View.GONE
     }
 
-    override fun showDrinks(result: SearchViewState.Items.Drinks) {
-        binding.progressBar.setVisibility(false)
-        binding.infoTextView.setVisibility(false)
-        binding.cocktailsRecycler.setVisibility(true)
+    private fun showDrinks(result: SearchViewState.Items.Drinks) {
+        binding.progressBar.visibility = View.GONE
+        binding.infoTextView.visibility = View.GONE
+        binding.cocktailsRecycler.visibility = View.VISIBLE
         drinksAdapter.listCocktails = result.drinksList
     }
 
-    override fun showError(result: SearchViewState.Items.Error) {
-        binding.progressBar.setVisibility(false)
-        binding.cocktailsRecycler.setVisibility(false)
-        binding.infoTextView.setVisibility(true)
+    private fun showError(result: SearchViewState.Items.Error) {
+        binding.progressBar.visibility = View.GONE
+        binding.cocktailsRecycler.visibility = View.GONE
+        binding.infoTextView.visibility = View.VISIBLE
         binding.infoTextView.text = result.error
     }
 
-    override fun showIdle() {
-        binding.progressBar.setVisibility(false)
-        binding.infoTextView.setVisibility(true)
+    private fun showIdle() {
+        binding.progressBar.visibility = View.GONE
+        binding.infoTextView.visibility = View.VISIBLE
         binding.infoTextView.text = "Input text"
-        binding.cocktailsRecycler.setVisibility(false)
+        binding.cocktailsRecycler.visibility = View.GONE
     }
 
     private fun onItemClick(item: CocktailListItem) {
@@ -116,10 +115,10 @@ class SearchByQueryFragment : Fragment(), SearchView {
 
     private fun onFavoriteClick(item: CocktailListItem) {
         Timber.d("search screen onFavoriteClick item: ${item.strDrink} is ${item.isFavorite}")
-        searchByQueryViewModel.userActionFlow.tryEmit(UserActionSearchByQuery.OnFavoritesChanged(item))
-    }
-
-    companion object {
-        fun newInstance(): SearchByQueryFragment = SearchByQueryFragment()
+        searchByQueryViewModel.userActionFlow.tryEmit(
+            UserActionSearchByQuery.OnFavoritesChanged(
+                item
+            )
+        )
     }
 }

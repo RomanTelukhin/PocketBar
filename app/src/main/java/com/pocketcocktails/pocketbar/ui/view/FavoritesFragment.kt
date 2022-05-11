@@ -1,10 +1,8 @@
 package com.pocketcocktails.pocketbar.ui.view
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.content.Context
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pocketcocktails.pocketbar.R
@@ -14,61 +12,53 @@ import com.pocketcocktails.pocketbar.ui.actions.UserActionShowFavorites
 import com.pocketcocktails.pocketbar.ui.adapter.FavoritesAdapter
 import com.pocketcocktails.pocketbar.ui.viewmodel.FavoritesViewModel
 import com.pocketcocktails.pocketbar.ui.viewstate.FavoritesViewState
-import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
 import com.pocketcocktails.pocketbar.utils.setVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
 
-    private lateinit var binding: FragmentFavoritesBinding
     private lateinit var favoritesAdapter: FavoritesAdapter
 
     @Inject
     lateinit var favoritesViewModel: FavoritesViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        requireContext().appComponent.inject(this)
-        setupView()
-        renderView()
-        return binding.root
+    override fun getViewBinding(): FragmentFavoritesBinding =
+        FragmentFavoritesBinding.inflate(layoutInflater)
+
+    override fun injectViewModel(appContext: Context) {
+        appContext.appComponent.inject(this)
     }
 
-    private fun setupView() =
+    override fun setupView() {
+        favoritesViewModel.userActionChannel.tryEmit(UserActionShowFavorites.ShowFavorites)
+        favoritesAdapter = FavoritesAdapter(
+            onItemClick = { cocktailListItem -> onItemClick(cocktailListItem) },
+            onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
+        )
         with(receiver = binding) {
-            favoritesAdapter = FavoritesAdapter(
-                onItemClick = { cocktailListItem -> onItemClick(cocktailListItem) },
-                onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
-            )
-            favoritesAdapter.setHasStableIds(true)
             favoritesRecycler.layoutManager = LinearLayoutManager(requireContext())
             favoritesRecycler.adapter = favoritesAdapter
-            favoritesViewModel.userActionChannel.tryEmit(UserActionShowFavorites.ShowFavorites)
         }
+    }
 
-    private fun renderView() {
-        lifecycleScope
-            .launchWhenStarted {
-                favoritesViewModel
-                    .favoriteCocktailsViewState
-                    .collect {
-                        Timber.d("$TEST_LOG_TAG renderView FavoritesViewState: $it")
-                        when (val state = it.items) {
-                            is FavoritesViewState.Items.Loading -> showLoading()
-                            is FavoritesViewState.Items.Drinks -> showDrinks(state)
-                            is FavoritesViewState.Items.Error -> showError(state)
-                            is FavoritesViewState.Items.Idle -> {}
-                        }
-                    }
+    override fun renderView() {
+        favoritesViewModel.favoriteCocktailsViewState
+            .flowWithLifecycle(lifecycle = lifecycle, minActiveState = Lifecycle.State.STARTED)
+            .onEach { viewState ->
+                when (val state = viewState.items) {
+                    is FavoritesViewState.Items.Loading -> showLoading()
+                    is FavoritesViewState.Items.Drinks -> showDrinks(state)
+                    is FavoritesViewState.Items.Error -> showError(state)
+                    is FavoritesViewState.Items.Idle -> {}
+                }
             }
+            .launchIn(scope = lifecycleScope)
     }
 
     private fun showLoading() {

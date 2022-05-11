@@ -82,6 +82,7 @@ class CocktailFragment : Fragment(), CocktailView {
                     binding.nameCocktail.text = viewState.cocktailItem.name
                     binding.drinkImage.load(viewState.cocktailItem.drinkThumb)
                     Timber.d("$TEST_LOG_TAG cocktail itemingredient: ${viewState.cocktailItem}")
+
                     ingredientAdapter.listIngrid = viewState.cocktailItem.ingredient
                 }
             }
