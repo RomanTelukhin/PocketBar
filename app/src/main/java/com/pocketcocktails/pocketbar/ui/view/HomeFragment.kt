@@ -52,16 +52,15 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(p0: View) {
-        val baseText =
-            when (p0) {
-                binding.rumImg -> getString(R.string.rum_text)
-                binding.ginImg -> getString(R.string.gin_text)
-                binding.tequilaImg -> getString(R.string.tequila_text)
-                binding.whiskeyImg -> getString(R.string.whiskey_text)
-                binding.vodkaImg -> getString(R.string.vodka_text)
-                binding.brandyImg -> getString(R.string.brandy_text)
-                else -> EMPTY_STRING
-            }
+        val baseText = when (p0) {
+            binding.rumImg -> getString(R.string.rum_text)
+            binding.ginImg -> getString(R.string.gin_text)
+            binding.tequilaImg -> getString(R.string.tequila_text)
+            binding.whiskeyImg -> getString(R.string.whiskey_text)
+            binding.vodkaImg -> getString(R.string.vodka_text)
+            binding.brandyImg -> getString(R.string.brandy_text)
+            else -> EMPTY_STRING
+        }
         val fragment = SearchByBaseFragment.newInstance(baseText)
         showCocktail(fragment)
     }

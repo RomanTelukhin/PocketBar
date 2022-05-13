@@ -3,6 +3,7 @@ package com.pocketcocktails.pocketbar.utils
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.pocketcocktails.pocketbar.CocktailsApp
 import com.pocketcocktails.pocketbar.di.AppComponent
@@ -23,5 +24,8 @@ fun ImageView.load(imageAddress: String) {
 
 fun View.setVisibility(isNeedShow: Boolean) {
     this.visibility = if(isNeedShow) View.VISIBLE else View.GONE
+}
 
+fun Context.showToast(info: String) {
+    Toast.makeText(this, info, Toast.LENGTH_SHORT).show()
 }

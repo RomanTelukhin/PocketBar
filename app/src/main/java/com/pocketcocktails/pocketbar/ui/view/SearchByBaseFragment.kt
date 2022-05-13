@@ -17,6 +17,7 @@ import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.appComponent
 import com.pocketcocktails.pocketbar.utils.setVisibility
+import com.pocketcocktails.pocketbar.utils.showToast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -85,6 +86,7 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
     private fun showError(result: SearchViewState.Items.Error) {
         binding.progressBar.setVisibility(false)
         binding.cocktailsRecycler.setVisibility(false)
+        requireActivity().showToast(result.error ?: "Error")
     }
 
     private fun onItemClick(item: CocktailListItem) {

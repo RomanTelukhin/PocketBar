@@ -7,7 +7,8 @@ import com.google.android.material.navigation.NavigationBarView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.ActivityMainBinding
 import com.pocketcocktails.pocketbar.utils.setVisibility
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity(), INavigation {
