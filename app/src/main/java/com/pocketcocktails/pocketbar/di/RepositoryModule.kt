@@ -1,7 +1,7 @@
 package com.pocketcocktails.pocketbar.di
 
-import com.pocketcocktails.pocketbar.data.repository.CocktailsRepository
-import com.pocketcocktails.pocketbar.data.repository.DefaultCocktailsRepository
+import com.pocketcocktails.pocketbar.domain.CocktailsRepository
+import com.pocketcocktails.pocketbar.data.CocktailsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 
@@ -9,7 +9,7 @@ import dagger.Provides
 object RepositoryModule {
 
     @Provides
-    fun provideMainRepositoryImpl(repository: DefaultCocktailsRepository): CocktailsRepository =
+    fun provideMainRepositoryImpl(repository: CocktailsRepositoryImpl): CocktailsRepository =
         repository
 
 }

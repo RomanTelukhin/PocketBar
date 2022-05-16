@@ -1,11 +1,13 @@
 package com.pocketcocktails.pocketbar.di
 
-import com.pocketcocktails.pocketbar.data.repository.CocktailsRepository
-import com.pocketcocktails.pocketbar.data.repository.DefaultCocktailsRepository
-import com.pocketcocktails.pocketbar.ui.interactions.CocktailInteraction
-import com.pocketcocktails.pocketbar.ui.interactions.FavoritesInteraction
-import com.pocketcocktails.pocketbar.ui.interactions.SearchByBaseInteraction
-import com.pocketcocktails.pocketbar.ui.interactions.SearchByQueryInteraction
+import com.pocketcocktails.pocketbar.domain.cocktail.interactions.impl.CocktailInteractionImpl
+import com.pocketcocktails.pocketbar.domain.favorites.interactions.impl.FavoritesInteractionImpl
+import com.pocketcocktails.pocketbar.domain.search.interactions.impl.SearchByBaseInteractionImpl
+import com.pocketcocktails.pocketbar.domain.search.interactions.impl.SearchByQueryInteractionImpl
+import com.pocketcocktails.pocketbar.domain.cocktail.interactions.CocktailInteraction
+import com.pocketcocktails.pocketbar.domain.favorites.interactions.FavoritesInteraction
+import com.pocketcocktails.pocketbar.domain.search.interactions.SearchByBaseInteraction
+import com.pocketcocktails.pocketbar.domain.search.interactions.SearchByQueryInteraction
 import dagger.Module
 import dagger.Provides
 
@@ -13,19 +15,15 @@ import dagger.Provides
 object InteractionModule {
 
     @Provides
-    fun provideCocktailInteraction(interactor: CocktailInteraction): CocktailInteraction =
-        interactor
+    fun provideCocktailInteraction(interactor: CocktailInteractionImpl): CocktailInteraction = interactor
 
     @Provides
-    fun provideFavoritesInteraction(interactor: FavoritesInteraction): FavoritesInteraction =
-        interactor
+    fun provideFavoritesInteraction(interactor: FavoritesInteractionImpl): FavoritesInteraction = interactor
 
     @Provides
-    fun provideSearchByBaseInteraction(interactor: SearchByBaseInteraction): SearchByBaseInteraction =
-        interactor
+    fun provideSearchByBaseInteraction(interactor: SearchByBaseInteractionImpl): SearchByBaseInteraction = interactor
 
     @Provides
-    fun provideSearchByQueryInteraction(interactor: SearchByQueryInteraction): SearchByQueryInteraction =
-        interactor
+    fun provideSearchByQueryInteraction(interactor: SearchByQueryInteractionImpl): SearchByQueryInteraction = interactor
 
 }

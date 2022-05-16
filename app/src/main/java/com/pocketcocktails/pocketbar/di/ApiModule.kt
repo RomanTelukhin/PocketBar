@@ -1,6 +1,6 @@
 package com.pocketcocktails.pocketbar.di
 
-import com.pocketcocktails.pocketbar.data.api.ApiService
+import com.pocketcocktails.pocketbar.data.network.ApiService
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor

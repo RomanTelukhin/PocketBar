@@ -2,11 +2,10 @@ package com.pocketcocktails.pocketbar.di
 
 import android.app.Application
 import android.content.Context
-import com.pocketcocktails.pocketbar.CocktailsApp
-import com.pocketcocktails.pocketbar.ui.view.CocktailFragment
-import com.pocketcocktails.pocketbar.ui.view.FavoritesFragment
-import com.pocketcocktails.pocketbar.ui.view.SearchByBaseFragment
-import com.pocketcocktails.pocketbar.ui.view.SearchByQueryFragment
+import com.pocketcocktails.pocketbar.presentation.cocktail.CocktailFragment
+import com.pocketcocktails.pocketbar.presentation.favorites.FavoritesFragment
+import com.pocketcocktails.pocketbar.presentation.search.SearchByBaseFragment
+import com.pocketcocktails.pocketbar.presentation.search.SearchByQueryFragment
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
@@ -18,6 +17,7 @@ import javax.inject.Singleton
         DatabaseModule::class,
         RepositoryModule::class,
         AppModule::class,
+        InteractionModule::class,
         ViewModelModule::class
     ]
 )

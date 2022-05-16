@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketBar">
         <activity
-            android:name=".ui.view.MainActivity"
+            android:name=".presentation.MainActivity"
             android:screenOrientation="fullSensor"
             android:exported="true">
             <intent-filter>
