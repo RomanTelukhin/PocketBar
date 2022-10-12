@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
 import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByBase
 import com.pocketcocktails.pocketbar.domain.search.interactions.SearchByBaseInteraction
-//import com.pocketcocktails.pocketbar.ui.viewstate.SearchPartialViewStates
 import com.pocketcocktails.pocketbar.presentation.search.state.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
 import com.pocketcocktails.pocketbar.utils.Result
-//import com.pocketcocktails.pocketbar.utils.SearchPartialViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -19,9 +17,12 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class SearchByBaseViewModel @Inject constructor(private val searchInteraction: SearchByBaseInteraction) :
     ViewModel() {
+
     val userActionFlow = MutableSharedFlow<UserActionSearchByBase>(1)
-    private val mutableStateFlow =
-        MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
+
+    var viewModelResult: SearchViewState.Items.Drinks? = null
+
+    private val mutableStateFlow = MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
 
     val cocktailsByBaseViewState: StateFlow<SearchViewState>
         get() = mutableStateFlow
@@ -30,6 +31,7 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
         Timber.d("$TEST_LOG_TAG performSearch flow: $this")
         emit(value = onQueryChanged(queryText = base))
         val result = searchInteraction.searchDrinkByBase(base)
+//        viewModelResult  = result
         Timber.d("$TEST_LOG_TAG performSearch flow result: $result")
         emit(value = onSearchResult(result = result))
     }
@@ -54,6 +56,9 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
             .onEach { viewState ->
                 Timber.d("$TEST_LOG_TAG queryPartialStateFlow onEach: $viewState")
                 mutableStateFlow.value = viewState
+//                if (viewState.items is SearchViewState.Items.Drinks) {
+//                    viewModelResult = viewState.items as SearchViewState.Items.Drinks
+//                }
             }
             .launchIn(viewModelScope)
     }

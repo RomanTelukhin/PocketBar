@@ -3,6 +3,7 @@ package com.pocketcocktails.pocketbar.presentation.cocktail
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pocketcocktails.pocketbar.databinding.FragmentCocktailBinding
 import com.pocketcocktails.pocketbar.presentation.cocktail.adapter.CocktailIngredientsAdapter
@@ -25,6 +26,8 @@ class CocktailFragment : BaseFragment<FragmentCocktailBinding>() {
 
     private var idCocktail = EMPTY_STRING
 
+    private val args: CocktailFragmentArgs by navArgs()
+
     @Inject
     lateinit var cocktailViewModel: CocktailViewModel
 
@@ -36,7 +39,7 @@ class CocktailFragment : BaseFragment<FragmentCocktailBinding>() {
 
     override fun setupView() {
         with(receiver = binding) {
-            cocktailViewModel.mIdCocktail = idCocktail
+            cocktailViewModel.mIdCocktail = args.idCocktail
             ingredientsRecycler.layoutManager = LinearLayoutManager(requireContext())
             ingredientsRecycler.adapter = ingredientAdapter
             Timber.d("$TEST_LOG_TAG setupViewModel id cocktail for load is: $idCocktail")
@@ -62,7 +65,7 @@ class CocktailFragment : BaseFragment<FragmentCocktailBinding>() {
                 if (viewState.cocktailItem.drinkThumb != null) {
                     binding.nameCocktail.text = viewState.cocktailItem.name
                     binding.drinkImage.load(viewState.cocktailItem.drinkThumb)
-                    Timber.d("$TEST_LOG_TAG cocktail itemingredient: ${viewState.cocktailItem}")
+                    Timber.d("$TEST_LOG_TAG cocktail item ingredient: ${viewState.cocktailItem}")
 
                     ingredientAdapter.listIngrid = viewState.cocktailItem.ingredient
                 }

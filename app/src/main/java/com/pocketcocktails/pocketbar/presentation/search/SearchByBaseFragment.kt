@@ -1,18 +1,18 @@
 package com.pocketcocktails.pocketbar.presentation.search
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
 import com.pocketcocktails.pocketbar.databinding.FragmentCocktailByBaseBinding
 import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByBase
-import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchAdapter
+import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchByBaseAdapter
 import com.pocketcocktails.pocketbar.presentation.base.BaseFragment
-import com.pocketcocktails.pocketbar.presentation.cocktail.CocktailFragment
 import com.pocketcocktails.pocketbar.presentation.search.viewmodel.SearchByBaseViewModel
 import com.pocketcocktails.pocketbar.presentation.search.state.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
@@ -29,12 +29,13 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
 
-    private lateinit var drinksAdapter: SearchAdapter
+    private lateinit var drinksAdapter: SearchByBaseAdapter
 
     private var cocktailBase = EMPTY_STRING
 
-    override fun getViewBinding(): FragmentCocktailByBaseBinding =
-        FragmentCocktailByBaseBinding.inflate(layoutInflater)
+    private val args: SearchByBaseFragmentArgs by navArgs()
+
+    override fun getViewBinding(): FragmentCocktailByBaseBinding = FragmentCocktailByBaseBinding.inflate(layoutInflater)
 
     override fun injectViewModel(appContext: Context) {
         appContext.appComponent.inject(this)
@@ -44,12 +45,12 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
     lateinit var searchByBaseViewModel: SearchByBaseViewModel
 
     override fun setupView() {
+        cocktailBase = args.base
         searchByBaseViewModel.userActionFlow.tryEmit(
             UserActionSearchByBase.OnBaseChanged(cocktailBase)
         )
 
-        drinksAdapter = SearchAdapter(
-            onItemClick = { cocktailListItem -> onItemClick(cocktailListItem) },
+        drinksAdapter = SearchByBaseAdapter(
             onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
         )
 
@@ -91,24 +92,7 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
         requireActivity().showToast(result.error ?: "Error")
     }
 
-    private fun onItemClick(item: CocktailListItemModel) {
-        Timber.d("search by base screen onItemClick item: ${item.strDrink}")
-        val fragment = CocktailFragment.newInstance(item.idDrink)
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
     private fun onFavoriteClick(item: CocktailListItemModel) {
         searchByBaseViewModel.userActionFlow.tryEmit(UserActionSearchByBase.OnFavoritesChanged(item))
-    }
-
-    companion object {
-        fun newInstance(cocktailBase: String): SearchByBaseFragment {
-            val fragment = SearchByBaseFragment()
-            fragment.cocktailBase = cocktailBase
-            return fragment
-        }
     }
 }

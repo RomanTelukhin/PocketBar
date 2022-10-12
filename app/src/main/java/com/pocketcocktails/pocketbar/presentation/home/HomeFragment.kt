@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.FragmentHomeBinding
 import com.pocketcocktails.pocketbar.presentation.MainActivity
@@ -37,24 +38,15 @@ class HomeFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showCocktail(fragmentSearch: SearchByBaseFragment) {
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragmentSearch)
-        transaction.addToBackStack(null)
-        transaction.commit()
+//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.container, fragmentSearch)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
+//        activity?.findNavController(R.id.activity_main_nav_host_fragment).navigate()
     }
 
-    override fun onStart() {
-        super.onStart()
-        (requireActivity() as MainActivity).hideBottomNavigation(true)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        (requireActivity() as MainActivity).hideBottomNavigation(false)
-    }
-
-    override fun onClick(p0: View) {
-        val baseText = when (p0) {
+    override fun onClick(v: View) {
+        val baseText = when (v) {
             binding.rumImg -> getString(R.string.rum_text)
             binding.ginImg -> getString(R.string.gin_text)
             binding.tequilaImg -> getString(R.string.tequila_text)
@@ -63,8 +55,10 @@ class HomeFragment : Fragment(), View.OnClickListener {
             binding.brandyImg -> getString(R.string.brandy_text)
             else -> EMPTY_STRING
         }
-        val fragment = SearchByBaseFragment.newInstance(baseText)
-        showCocktail(fragment)
+        val action = HomeFragmentDirections.actionHomeFragmentToSearchByBaseFragment(baseText)
+        v.findNavController().navigate(action)
+//        val fragment = SearchByBaseFragment.newInstance(baseText)
+//        showCocktail(fragment)
     }
 
 }

@@ -5,15 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
+import com.pocketcocktails.pocketbar.presentation.search.SearchByBaseFragmentDirections
+import com.pocketcocktails.pocketbar.presentation.search.SearchByQueryFragmentDirections
 import com.pocketcocktails.pocketbar.utils.load
 
-class SearchAdapter(
-    private var onItemClick: (CocktailListItemModel) -> Unit,
+class SearchByQueryAdapter(
     private var onFavoriteClick: (CocktailListItemModel) -> Unit
-) : RecyclerView.Adapter<SearchAdapter.DrinkViewHolder>() {
+) : RecyclerView.Adapter<SearchByQueryAdapter.DrinkViewHolder>() {
 
     var listCocktails: List<CocktailListItemModel> = emptyList()
         set(value) {
@@ -32,7 +34,10 @@ class SearchAdapter(
 
     override fun onBindViewHolder(holder: DrinkViewHolder, position: Int) {
         val drinksItem = listCocktails[position]
-        holder.itemView.setOnClickListener { onItemClick.invoke(drinksItem) }
+        val action = SearchByQueryFragmentDirections.actionSearchByQueryFragmentToCocktailFragment(drinksItem.idDrink)
+        holder.itemView.setOnClickListener {
+            it.findNavController().navigate(action)
+        }
         holder.drinkName.text = drinksItem.strDrink
         val url = drinksItem.strDrinkThumb
         holder.drinksImage.load(url)

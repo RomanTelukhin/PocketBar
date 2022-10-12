@@ -4,13 +4,12 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
 import com.pocketcocktails.pocketbar.databinding.FragmentSearchBinding
 import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByQuery
-import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchAdapter
+import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchByBaseAdapter
 import com.pocketcocktails.pocketbar.presentation.base.BaseFragment
-import com.pocketcocktails.pocketbar.presentation.cocktail.CocktailFragment
+import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchByQueryAdapter
 import com.pocketcocktails.pocketbar.presentation.search.viewmodel.SearchByQueryViewModel
 import com.pocketcocktails.pocketbar.presentation.search.state.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
@@ -26,13 +25,12 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
         fun newInstance(): SearchByQueryFragment = SearchByQueryFragment()
     }
 
-    private lateinit var drinksAdapter: SearchAdapter
+    private lateinit var drinksAdapter: SearchByQueryAdapter
 
     @Inject
     lateinit var searchByQueryViewModel: SearchByQueryViewModel
 
-    override fun getViewBinding(): FragmentSearchBinding =
-        FragmentSearchBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentSearchBinding = FragmentSearchBinding.inflate(layoutInflater)
 
     override fun injectViewModel(appContext: Context) {
         appContext.appComponent.inject(this)
@@ -40,8 +38,7 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
 
     override fun setupView() =
         with(receiver = binding) {
-            drinksAdapter = SearchAdapter(
-                onItemClick = { cocktailListItem -> onItemClick(cocktailListItem) },
+            drinksAdapter = SearchByQueryAdapter(
                 onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
             )
             drinksAdapter.setHasStableIds(true)
@@ -53,9 +50,7 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
                     override fun onQueryTextSubmit(query: String): Boolean = false
                     override fun onQueryTextChange(newText: String): Boolean {
                         searchByQueryViewModel.userActionFlow.tryEmit(
-                            com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByQuery.OnQueryChanged(
-                                newText
-                            )
+                            UserActionSearchByQuery.OnQueryChanged(newText)
                         )
                         return false
                     }
@@ -108,11 +103,11 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun onItemClick(item: CocktailListItemModel) {
-        val fragment = CocktailFragment.newInstance(item.idDrink)
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+//        val fragment = CocktailFragment.newInstance(item.idDrink)
+//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.container, fragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
     }
 
     private fun onFavoriteClick(item: CocktailListItemModel) {

@@ -1,19 +1,20 @@
-package com.pocketcocktails.pocketbar.presentation.favorites.adapter
+package com.pocketcocktails.pocketbar.presentation.search.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
+import com.pocketcocktails.pocketbar.presentation.search.SearchByBaseFragmentDirections
 import com.pocketcocktails.pocketbar.utils.load
 
-class FavoritesAdapter(
-//    private var onItemClick: (CocktailListItemModel) -> Unit,
+class SearchByBaseAdapter(
     private var onFavoriteClick: (CocktailListItemModel) -> Unit
-) : RecyclerView.Adapter<FavoritesAdapter.DrinkViewHolder>() {
+) : RecyclerView.Adapter<SearchByBaseAdapter.DrinkViewHolder>() {
 
     var listCocktails: List<CocktailListItemModel> = emptyList()
         set(value) {
@@ -32,15 +33,14 @@ class FavoritesAdapter(
 
     override fun onBindViewHolder(holder: DrinkViewHolder, position: Int) {
         val drinksItem = listCocktails[position]
+        val action = SearchByBaseFragmentDirections.actionSearchByBaseFragmentToCocktailFragment(drinksItem.idDrink)
         holder.itemView.setOnClickListener {
-//            onItemClick.invoke(drinksItem)
-
+            it.findNavController().navigate(action)
         }
         holder.drinkName.text = drinksItem.strDrink
         val url = drinksItem.strDrinkThumb
         holder.drinksImage.load(url)
         holder.favImage.isActivated = drinksItem.isFavorite
-
         holder.favImage.setOnClickListener {
             holder.favImage.isActivated = !holder.favImage.isActivated
             onFavoriteClick.invoke(drinksItem)

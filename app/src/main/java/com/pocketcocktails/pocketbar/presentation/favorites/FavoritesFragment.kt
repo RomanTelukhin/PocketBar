@@ -40,7 +40,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
     override fun setupView() {
         favoritesViewModel.userActionChannel.tryEmit(UserActionShowFavorites.ShowFavorites)
         favoritesAdapter = FavoritesAdapter(
-            onItemClick = { cocktailListItem -> onItemClick(cocktailListItem) },
             onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
         )
         with(receiver = binding) {
@@ -81,14 +80,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         binding.favoritesRecycler.setVisibility(false)
         binding.infoTextView.setVisibility(true)
         binding.infoTextView.text = result.error
-    }
-
-    private fun onItemClick(item: CocktailListItemModel) {
-        val fragment = CocktailFragment.newInstance(item.idDrink)
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 
     private fun onFavoriteClick(item: CocktailListItemModel) {
