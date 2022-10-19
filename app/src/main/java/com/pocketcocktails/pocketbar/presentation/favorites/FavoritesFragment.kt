@@ -30,8 +30,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
     @Inject
     lateinit var favoritesViewModel: FavoritesViewModel
 
-    override fun getViewBinding(): FragmentFavoritesBinding =
-        FragmentFavoritesBinding.inflate(layoutInflater)
+    override fun getViewBinding(): FragmentFavoritesBinding = FragmentFavoritesBinding.inflate(layoutInflater)
 
     override fun injectViewModel(appContext: Context) {
         appContext.appComponent.inject(this)
@@ -72,7 +71,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>() {
         binding.progressBar.setVisibility(false)
         binding.infoTextView.setVisibility(false)
         binding.favoritesRecycler.setVisibility(true)
-        favoritesAdapter.listCocktails = result.drinksList
+        favoritesAdapter.differ.submitList(result.drinksList)
     }
 
     private fun showError(result: FavoritesViewState.Items.Error) {

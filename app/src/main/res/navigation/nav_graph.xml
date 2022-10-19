@@ -21,7 +21,11 @@
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.pocketcocktails.pocketbar.presentation.favorites.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_cocktailFragment"
+            app:destination="@id/cocktailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"

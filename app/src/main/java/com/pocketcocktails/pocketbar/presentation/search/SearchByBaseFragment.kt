@@ -31,8 +31,6 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
 
     private lateinit var drinksAdapter: SearchByBaseAdapter
 
-    private var cocktailBase = EMPTY_STRING
-
     private val args: SearchByBaseFragmentArgs by navArgs()
 
     override fun getViewBinding(): FragmentCocktailByBaseBinding = FragmentCocktailByBaseBinding.inflate(layoutInflater)
@@ -45,10 +43,7 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
     lateinit var searchByBaseViewModel: SearchByBaseViewModel
 
     override fun setupView() {
-        cocktailBase = args.base
-        searchByBaseViewModel.userActionFlow.tryEmit(
-            UserActionSearchByBase.OnBaseChanged(cocktailBase)
-        )
+        searchByBaseViewModel.searchByBase(args.base)
 
         drinksAdapter = SearchByBaseAdapter(
             onFavoriteClick = { cocktailListItem -> onFavoriteClick(cocktailListItem) }
@@ -83,7 +78,8 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
         Timber.d("$TEST_LOG_TAG renderView SearchViewState: $")
         binding.progressBar.setVisibility(false)
         binding.cocktailsRecycler.setVisibility(true)
-        drinksAdapter.listCocktails = result.drinksList
+        drinksAdapter.differ.submitList(result.drinksList)
+//        drinksAdapter.listCocktails = result.drinksList
     }
 
     private fun showError(result: SearchViewState.Items.Error) {
@@ -93,6 +89,6 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
     }
 
     private fun onFavoriteClick(item: CocktailListItemModel) {
-        searchByBaseViewModel.userActionFlow.tryEmit(UserActionSearchByBase.OnFavoritesChanged(item))
+        searchByBaseViewModel.addToFavorite(item)
     }
 }

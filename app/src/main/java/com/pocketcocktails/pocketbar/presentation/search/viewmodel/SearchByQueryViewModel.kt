@@ -23,7 +23,7 @@ class SearchByQueryViewModel @Inject constructor(private val searchByQueryIntera
     Можно подключить несколько потребителей
     Распроситраняет последний элемент всем подписчикам.
     Каждый подписчик сразу получает последний отправленный элемент.*/
-    val userActionFlow = MutableSharedFlow<UserActionSearchByQuery>(1)
+    private val userActionFlow = MutableSharedFlow<UserActionSearchByQuery>(1)
 
     /**"Коллектор" состояний который слушает вью. Он отправляет состояния*/
     private val mutableStateFlow = MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
@@ -49,21 +49,22 @@ class SearchByQueryViewModel @Inject constructor(private val searchByQueryIntera
     }
 
     init {
+        val queryPartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
+            /**Возвращает поток, содержащий только значения, которые являются экземплярами указанного типа.*/
+            .filterIsInstance<UserActionSearchByQuery.OnQueryChanged>()
+            .distinctUntilChanged()
+            /**Переключение на новый поток для эмита частичного стейта.....*/
+            .flatMapLatest { action ->
+                Timber.d("$TEST_LOG_TAG queryPartialStateFlow flatMapLatest: $action")
+                performSearchByQuery(queryText = action.searchText)
+            }
+
         val favoritePartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
             /**Возвращает поток, содержащий только значения, которые являются экземплярами указанного типа.*/
             .filterIsInstance<UserActionSearchByQuery.OnFavoritesChanged>()
             .flatMapLatest { action ->
                 Timber.d("$TEST_LOG_TAG favoritePartialStateFlow flatMapLatest: $action")
                 onFavoriteClick(action.favoriteId)
-            }
-
-        val queryPartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
-            /**Возвращает поток, содержащий только значения, которые являются экземплярами указанного типа.*/
-            .filterIsInstance<UserActionSearchByQuery.OnQueryChanged>()
-            /**Переключение на новый поток для эмита частичного стейта.....*/
-            .flatMapLatest { action ->
-                Timber.d("$TEST_LOG_TAG queryPartialStateFlow flatMapLatest: $action")
-                performSearchByQuery(queryText = action.searchText)
             }
 
         val allPartialStateFlow: Flow<SearchPartialViewState> = merge(queryPartialStateFlow, favoritePartialStateFlow)
@@ -113,4 +114,12 @@ class SearchByQueryViewModel @Inject constructor(private val searchByQueryIntera
             val previousStateCopy = previousViewState.copy(isFavorite = cocktail.isFavorite)
             previousStateCopy
         }
+
+    fun searchQuery(queryText: String) {
+        userActionFlow.tryEmit(UserActionSearchByQuery.OnQueryChanged(queryText))
+    }
+
+    fun changeFavorite(item: CocktailListItemModel) {
+        userActionFlow.tryEmit(UserActionSearchByQuery.OnFavoritesChanged(item))
+    }
 }

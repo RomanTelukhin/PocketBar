@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.FragmentHomeBinding
+import com.pocketcocktails.pocketbar.presentation.AlgoClass
 import com.pocketcocktails.pocketbar.presentation.MainActivity
 import com.pocketcocktails.pocketbar.presentation.search.SearchByBaseFragment
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
@@ -37,14 +38,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
-    private fun showCocktail(fragmentSearch: SearchByBaseFragment) {
-//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.container, fragmentSearch)
-//        transaction.addToBackStack(null)
-//        transaction.commit()
-//        activity?.findNavController(R.id.activity_main_nav_host_fragment).navigate()
-    }
-
     override fun onClick(v: View) {
         val baseText = when (v) {
             binding.rumImg -> getString(R.string.rum_text)
@@ -57,8 +50,6 @@ class HomeFragment : Fragment(), View.OnClickListener {
         }
         val action = HomeFragmentDirections.actionHomeFragmentToSearchByBaseFragment(baseText)
         v.findNavController().navigate(action)
-//        val fragment = SearchByBaseFragment.newInstance(baseText)
-//        showCocktail(fragment)
     }
 
 }

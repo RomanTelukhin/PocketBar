@@ -6,8 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
 import com.pocketcocktails.pocketbar.databinding.FragmentSearchBinding
-import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByQuery
-import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchByBaseAdapter
 import com.pocketcocktails.pocketbar.presentation.base.BaseFragment
 import com.pocketcocktails.pocketbar.presentation.search.adapter.SearchByQueryAdapter
 import com.pocketcocktails.pocketbar.presentation.search.viewmodel.SearchByQueryViewModel
@@ -49,9 +47,7 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
                 object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String): Boolean = false
                     override fun onQueryTextChange(newText: String): Boolean {
-                        searchByQueryViewModel.userActionFlow.tryEmit(
-                            UserActionSearchByQuery.OnQueryChanged(newText)
-                        )
+                        searchByQueryViewModel.searchQuery(newText)
                         return false
                     }
                 })
@@ -85,7 +81,8 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
         binding.progressBar.visibility = View.GONE
         binding.infoTextView.visibility = View.GONE
         binding.cocktailsRecycler.visibility = View.VISIBLE
-        drinksAdapter.listCocktails = result.drinksList
+        drinksAdapter.differ.submitList( result.drinksList)
+//        drinksAdapter.listCocktails = result.drinksList
     }
 
     private fun showError(result: SearchViewState.Items.Error) {
@@ -102,20 +99,8 @@ class SearchByQueryFragment : BaseFragment<FragmentSearchBinding>() {
         binding.cocktailsRecycler.visibility = View.GONE
     }
 
-    private fun onItemClick(item: CocktailListItemModel) {
-//        val fragment = CocktailFragment.newInstance(item.idDrink)
-//        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-//        transaction.replace(R.id.container, fragment)
-//        transaction.addToBackStack(null)
-//        transaction.commit()
-    }
-
     private fun onFavoriteClick(item: CocktailListItemModel) {
         Timber.d("search screen onFavoriteClick item: ${item.strDrink} is ${item.isFavorite}")
-        searchByQueryViewModel.userActionFlow.tryEmit(
-            UserActionSearchByQuery.OnFavoritesChanged(
-                item
-            )
-        )
+        searchByQueryViewModel.changeFavorite(item)
     }
 }

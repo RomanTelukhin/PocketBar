@@ -7,7 +7,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.pocketcocktails.pocketbar.R
 import com.pocketcocktails.pocketbar.databinding.ActivityMainBinding
 import com.pocketcocktails.pocketbar.utils.setVisibility
-import kotlinx.coroutines.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNavigation(viewBinding : ActivityMainBinding) {
+    private fun setupNavigation(viewBinding: ActivityMainBinding) {
         val navController = (supportFragmentManager
             .findFragmentById(viewBinding.navHostFragment.id) as NavHostFragment)
             .navController

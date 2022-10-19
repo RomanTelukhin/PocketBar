@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pocketcocktails.pocketbar.presentation.model.CocktailListItemModel
 import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByBase
 import com.pocketcocktails.pocketbar.domain.search.interactions.SearchByBaseInteraction
+import com.pocketcocktails.pocketbar.presentation.search.action.UserActionSearchByQuery
 import com.pocketcocktails.pocketbar.presentation.search.state.SearchViewState
 import com.pocketcocktails.pocketbar.utils.Constants.EMPTY_STRING
 import com.pocketcocktails.pocketbar.utils.Constants.TEST_LOG_TAG
@@ -15,12 +16,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class SearchByBaseViewModel @Inject constructor(private val searchInteraction: SearchByBaseInteraction) :
-    ViewModel() {
+class SearchByBaseViewModel @Inject constructor(private val searchBybBaseInteraction: SearchByBaseInteraction) : ViewModel() {
 
-    val userActionFlow = MutableSharedFlow<UserActionSearchByBase>(1)
-
-    var viewModelResult: SearchViewState.Items.Drinks? = null
+    private val userActionFlow = MutableSharedFlow<UserActionSearchByBase>(1)
 
     private val mutableStateFlow = MutableStateFlow(SearchViewState(EMPTY_STRING, false, SearchViewState.Items.Idle))
 
@@ -29,22 +27,36 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
 
     private fun performSearchByBase(base: String): Flow<SearchPartialViewState> = flow {
         Timber.d("$TEST_LOG_TAG performSearch flow: $this")
-        emit(value = onQueryChanged(queryText = base))
-        val result = searchInteraction.searchDrinkByBase(base)
-//        viewModelResult  = result
+        emit(value = onBaseChanged(base = base))
+        val result = searchBybBaseInteraction.searchDrinkByBase(base)
         Timber.d("$TEST_LOG_TAG performSearch flow result: $result")
         emit(value = onSearchResult(result = result))
     }
 
+    private fun onFavoriteClick(cocktail: CocktailListItemModel): Flow<SearchPartialViewState> = flow {
+        Timber.d("$TEST_LOG_TAG onFavoriteClick flow: $this")
+        emit(value = onFavoriteChanged(cocktail = cocktail))
+        searchBybBaseInteraction.changeFavorite(cocktail)
+    }
+
     init {
-        val queryPartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
+        val basePartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
             .filterIsInstance<UserActionSearchByBase.OnBaseChanged>()
+            .distinctUntilChanged()
             .flatMapLatest { action ->
                 Timber.d("$TEST_LOG_TAG queryPartialStateFlow flatMapLatest: $action")
                 performSearchByBase(base = action.base)
             }
 
-        val allPartialStateFlow: Flow<SearchPartialViewState> = merge(queryPartialStateFlow)
+        val favoritePartialStateFlow: Flow<SearchPartialViewState> = userActionFlow
+            /**Возвращает поток, содержащий только значения, которые являются экземплярами указанного типа.*/
+            .filterIsInstance<UserActionSearchByBase.OnFavoritesChanged>()
+            .flatMapLatest { action ->
+                Timber.d("$TEST_LOG_TAG favoritePartialStateFlow flatMapLatest: $action")
+                onFavoriteClick(action.favoriteId)
+            }
+
+        val allPartialStateFlow: Flow<SearchPartialViewState> = merge(basePartialStateFlow, favoritePartialStateFlow)
 
         allPartialStateFlow
             .scan(
@@ -56,16 +68,14 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
             .onEach { viewState ->
                 Timber.d("$TEST_LOG_TAG queryPartialStateFlow onEach: $viewState")
                 mutableStateFlow.value = viewState
-//                if (viewState.items is SearchViewState.Items.Drinks) {
-//                    viewModelResult = viewState.items as SearchViewState.Items.Drinks
-//                }
             }
             .launchIn(viewModelScope)
+
     }
 
-    private fun onQueryChanged(queryText: String): SearchPartialViewState = { previousViewState ->
-        Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged queryText: $queryText, previousViewState: $previousViewState")
-        val previousStateCopy = previousViewState.copy(query = queryText, items = SearchViewState.Items.Loading)
+    private fun onBaseChanged(base: String): SearchPartialViewState = { previousViewState ->
+        Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged queryText: $base, previousViewState: $previousViewState")
+        val previousStateCopy = previousViewState.copy(query = base, items = SearchViewState.Items.Loading)
         Timber.d("$TEST_LOG_TAG SearchPartialViewStates onQueryChanged previousViewState after copy: $previousStateCopy")
         previousStateCopy
     }
@@ -87,6 +97,14 @@ class SearchByBaseViewModel @Inject constructor(private val searchInteraction: S
             val previousStateCopy = previousViewState.copy(isFavorite = cocktail.isFavorite)
             previousStateCopy
         }
+
+    fun searchByBase(base: String) {
+        userActionFlow.tryEmit(UserActionSearchByBase.OnBaseChanged(base))
+    }
+
+    fun addToFavorite(item: CocktailListItemModel) {
+        userActionFlow.tryEmit(UserActionSearchByBase.OnFavoritesChanged(item))
+    }
 
 }
 
