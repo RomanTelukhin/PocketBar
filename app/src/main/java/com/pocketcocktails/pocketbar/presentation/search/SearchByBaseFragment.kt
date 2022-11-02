@@ -23,6 +23,8 @@ import com.pocketcocktails.pocketbar.utils.showToast
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -53,6 +55,27 @@ class SearchByBaseFragment : BaseFragment<FragmentCocktailByBaseBinding>() {
             cocktailsRecycler.layoutManager = LinearLayoutManager(requireContext())
             cocktailsRecycler.adapter = drinksAdapter
         }
+
+
+//        val serverRequestCollector = ServerRequestCollector()
+//        val readFileCollector = ReadFileCollector()
+//        val hardcodeCollector = HardcodeCollector()
+//        val differentCollector = DifferentCollector(
+//            serverRequestCollector,
+//            readFileCollector,
+//            hardcodeCollector
+//        )
+        val photoRecognizer = PhotoRecognizer()
+        val collectorsJob = viewLifecycleOwner.lifecycleScope.launch {
+//            Timber.d("Test -----: START")
+//            Timber.d("Test -----: ${differentCollector.collect()}")
+
+            Timber.d("Test -----: START")
+            photoRecognizer.processPhoto()
+            Timber.d("Test -----: FINISH")
+
+        }
+//        collectorsJob.cancel()
     }
 
     override fun renderView() {
